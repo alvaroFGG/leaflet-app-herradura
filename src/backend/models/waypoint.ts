@@ -1,7 +1,10 @@
-import mongoose, { Schema, model } from 'mongoose';
-
+import { Schema, model } from "mongoose";
 
 const WaypointSchema = new Schema({
-    name: { type: String, required: true },
-    description: { type: String, required: true },
-    location: { type: number[], required: true },
+  name: { type: String, required: true },
+  description: { type: String, required: false },
+  location: { type: [Number], required: true },
+  type: { type: String, required: true },
+});
+
+export const WaypointModel = model("Waypoint", WaypointSchema, "waypoints");
