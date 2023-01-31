@@ -5,6 +5,7 @@ import { useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { IWaypoint } from "@/backend/models/interfaces/waypoint";
+import { MarkerPopup } from "./MarkerPopup";
 
 const ZOOM = 15;
 const SCROLL = true;
@@ -40,14 +41,18 @@ const Map = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {waypoints.map((waypoint) => (
-        <Marker
-          key={waypoint._id}
-          position={waypoint.location as LatLngExpression}
-          title={waypoint.name}
-          icon={drinkerIcon}
-        />
-      ))}
+      {waypoints &&
+        waypoints.length > 0 &&
+        waypoints.map((waypoint) => (
+          <Marker
+            key={waypoint._id}
+            position={waypoint.location as LatLngExpression}
+            title={waypoint.name}
+            icon={drinkerIcon}
+          >
+            <MarkerPopup waypoint={waypoint} />
+          </Marker>
+        ))}
     </MapContainer>
   );
 };
