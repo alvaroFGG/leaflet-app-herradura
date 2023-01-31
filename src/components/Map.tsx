@@ -10,6 +10,7 @@ import { MarkerPopup } from "./MarkerPopup";
 const ZOOM = 15;
 const SCROLL = true;
 const CENTER = [41.290131, -2.320729] as LatLngExpression;
+const WAYPOINTS_URL = "/api/waypoints";
 
 const Map = () => {
   const [waypoints, setWaypoints] = useState<IWaypoint[]>([]);
@@ -20,7 +21,7 @@ const Map = () => {
   });
 
   const fetchWaypoints = async () => {
-    const response = await fetch("/api/waypoints");
+    const response = await fetch(WAYPOINTS_URL);
     const data = await response.json();
     setWaypoints(data);
   };
