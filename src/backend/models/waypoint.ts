@@ -2,8 +2,8 @@ import { Schema, model } from "mongoose";
 
 const WaypointSchema = new Schema({
   name: { type: String, required: true },
-  description: { type: String, required: true },
-  location: { type: [Number], required: false },
+  description: { type: String, required: false },
+  location: { type: [Number], required: true },
   type: { type: String, required: true },
 });
 
