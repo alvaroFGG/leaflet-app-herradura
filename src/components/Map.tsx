@@ -30,17 +30,33 @@ const Map = () => {
     fetchWaypoints();
   }, []);
 
+  const readUsersLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        console.log(latitude, longitude);
+      });
+    }
+  };
+
   return (
     <MapContainer
       center={CENTER}
       zoom={ZOOM}
       scrollWheelZoom={SCROLL}
-      style={{ height: "100vh" }}
+      style={{ height: "100vh", zIndex: 0 }}
     >
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+
+      <button
+        onClick={() => readUsersLocation()}
+        style={{ position: "absolute", backgroundColor: "red" }}
+      >
+        CLica
+      </button>
 
       {waypoints &&
         waypoints.length > 0 &&
