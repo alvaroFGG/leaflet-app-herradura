@@ -1,19 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  useMapEvents,
-  useMapEvent,
-  MapContainerProps,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { LatLngExpression } from "leaflet";
 import { useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { IWaypoint } from "@/backend/models/interfaces/waypoint";
 import { MarkerPopup } from "./MarkerPopup";
-import styled from "styled-components";
+import { Button } from "react-bootstrap";
 
 const ZOOM = 15;
 const SCROLL = true;
@@ -22,6 +15,7 @@ const WAYPOINTS_URL = "/api/waypoints";
 
 const Map = () => {
   const [waypoints, setWaypoints] = useState<IWaypoint[]>([]);
+
   const mapRef = useRef<any>(null);
 
   const drinkerIcon = new L.Icon({
@@ -39,6 +33,16 @@ const Map = () => {
     fetchWaypoints();
   }, []);
 
+  const addMarkerInUserLocation = (position: LatLngExpression) => {
+    const marker = L.marker(position, {
+      icon: drinkerIcon,
+    }).addTo(mapRef.current);
+
+    marker.bindPopup("You are here").openPopup();
+
+    // abrir un modal de formilario, pasarle la posicion y desde el componente del modal hacer el post
+  };
+
   const navigateToUserLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -47,6 +51,8 @@ const Map = () => {
         mapRef.current.flyTo([latitude, longitude], ZOOM, {
           animation: true,
         });
+
+        addMarkerInUserLocation([latitude, longitude]);
       });
     }
   };
@@ -63,8 +69,13 @@ const Map = () => {
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-
-      <Button onClick={() => navigateToUserLocation()}>+</Button>
+      <Button
+        className="position-absolute bg-success border-0"
+        style={{ zIndex: 1000, top: 80, left: 10 }}
+        onClick={() => navigateToUserLocation()}
+      >
+        +
+      </Button>
 
       {waypoints &&
         waypoints.length > 0 &&
@@ -83,16 +94,3 @@ const Map = () => {
 };
 
 export default Map;
-
-const Button = styled.button`
-  position: absolute;
-  background-color: green;
-  z-index: 1000;
-  margin: 90px 0 0 12px;
-  padding: 5px 10px;
-  color: white;
-  border-radius: 4px;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-`;
