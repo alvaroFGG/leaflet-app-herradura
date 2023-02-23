@@ -7,6 +7,7 @@ import L from "leaflet";
 import { IWaypoint } from "@/backend/models/interfaces/waypoint";
 import { MarkerPopup } from "./MarkerPopup";
 import { Button } from "react-bootstrap";
+import { ModalForm } from "./ModalForm";
 
 const ZOOM = 15;
 const SCROLL = true;
@@ -15,6 +16,8 @@ const WAYPOINTS_URL = "/api/waypoints";
 
 const Map = () => {
   const [waypoints, setWaypoints] = useState<IWaypoint[]>([]);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [latlng, setLatlng] = useState<number[]>([]);
 
   const mapRef = useRef<any>(null);
 
@@ -38,9 +41,10 @@ const Map = () => {
       icon: drinkerIcon,
     }).addTo(mapRef.current);
 
-    marker.bindPopup("You are here").openPopup();
+    marker.bindPopup("Estas aquí").openPopup();
+    setLatlng(position as number[]);
 
-    // abrir un modal de formilario, pasarle la posicion y desde el componente del modal hacer el post
+    setShowModal(true);
   };
 
   const navigateToUserLocation = () => {
@@ -48,11 +52,11 @@ const Map = () => {
       navigator.geolocation.getCurrentPosition((position) => {
         const { latitude, longitude } = position.coords;
 
+        addMarkerInUserLocation([latitude, longitude]);
+
         mapRef.current.flyTo([latitude, longitude], ZOOM, {
           animation: true,
         });
-
-        addMarkerInUserLocation([latitude, longitude]);
       });
     }
   };
@@ -76,6 +80,12 @@ const Map = () => {
       >
         +
       </Button>
+
+      <ModalForm
+        showModal={showModal}
+        setShowModal={setShowModal}
+        latlng={latlng}
+      />
 
       {waypoints &&
         waypoints.length > 0 &&
