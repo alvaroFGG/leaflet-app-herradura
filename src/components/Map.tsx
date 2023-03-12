@@ -8,8 +8,7 @@ import { IWaypoint } from "@/backend/models/interfaces/waypoint";
 import { MarkerPopup } from "./MarkerPopup";
 import { Button, Spinner } from "react-bootstrap";
 import { ModalForm } from "./ModalForm";
-import { EMarkerIcon } from "@/types/enums/markerIcons";
-import { EMarkerType } from "@/types/enums";
+import { EMarkerType, EMarkerIcon } from "@/types/enums";
 
 const ZOOM = 15;
 const SCROLL = true;
