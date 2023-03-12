@@ -6,7 +6,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { IWaypoint } from "@/backend/models/interfaces/waypoint";
 import { MarkerPopup } from "./MarkerPopup";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { ModalForm } from "./ModalForm";
 
 const ZOOM = 15;
@@ -18,6 +18,7 @@ const Map = () => {
   const [waypoints, setWaypoints] = useState<IWaypoint[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [latlng, setLatlng] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const mapRef = useRef<any>(null);
 
@@ -45,9 +46,11 @@ const Map = () => {
     setLatlng(position as number[]);
 
     setShowModal(true);
+    setIsLoading(false);
   };
 
   const navigateToUserLocation = () => {
+    setIsLoading(true);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         const { latitude, longitude } = position.coords;
@@ -74,11 +77,15 @@ const Map = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <Button
-        className="position-absolute bg-success border-0"
+        className="position-absolute bg-success border-0 "
         style={{ zIndex: 1000, top: 80, left: 10 }}
         onClick={() => navigateToUserLocation()}
       >
-        +
+        {isLoading ? (
+          <Spinner size="sm" style={{ width: "12px", height: "12px" }} />
+        ) : (
+          <span style={{ width: "12px", height: "12px" }}>+</span>
+        )}
       </Button>
 
       <ModalForm
