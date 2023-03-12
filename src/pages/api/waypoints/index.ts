@@ -30,7 +30,7 @@ const updateWaypoint = async (req: NextApiRequest, res: NextApiResponse) => {
   res.status(200).json(waypoint);
 };
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const createEndpoint = async (req: NextApiRequest, res: NextApiResponse) => {
   ProviderDatabase.init();
 
   switch (req.method) {
@@ -48,3 +48,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       break;
   }
 };
+
+export default createEndpoint;

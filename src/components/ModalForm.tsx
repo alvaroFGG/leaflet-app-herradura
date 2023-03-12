@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
@@ -9,22 +9,39 @@ type Props = {
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
   latlng: number[];
+  fetchWaypoints: () => void;
 };
+
+const WAYPOINTS_URL = "/api/waypoints";
 
 export const ModalForm: React.FC<Props> = ({
   showModal,
   setShowModal,
   latlng,
+  fetchWaypoints,
 }) => {
-  useEffect(() => {
-    console.log(latlng);
-  }, [latlng]);
-
   const { register, handleSubmit } = useForm();
 
+  const addMarkerToDB = async (data: any) => {
+    data.location = [data.lat, data.lng];
+    delete data.lat;
+    delete data.lng;
+
+    await fetch(WAYPOINTS_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+  };
+
   const onSubmit = (data: any) => {
-    console.log(data);
+    addMarkerToDB(data);
+
     setShowModal(false);
+
+    fetchWaypoints();
   };
 
   return (
@@ -41,6 +58,24 @@ export const ModalForm: React.FC<Props> = ({
               type="text"
               placeholder="Nombre del marcador"
               {...register("name", { required: true })}
+            />
+          </Form.Group>
+
+          <Form.Group hidden>
+            <Form.Control
+              type="number"
+              value={latlng[0]}
+              hidden
+              {...register("lat")}
+            />
+          </Form.Group>
+
+          <Form.Group hidden>
+            <Form.Control
+              type="number"
+              value={latlng[1]}
+              hidden
+              {...register("lng")}
             />
           </Form.Group>
 

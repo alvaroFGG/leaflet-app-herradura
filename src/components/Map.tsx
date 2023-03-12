@@ -85,6 +85,7 @@ const Map = () => {
         showModal={showModal}
         setShowModal={setShowModal}
         latlng={latlng}
+        fetchWaypoints={fetchWaypoints}
       />
 
       {waypoints &&
