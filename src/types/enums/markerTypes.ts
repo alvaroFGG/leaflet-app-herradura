@@ -1,0 +1,5 @@
+export enum EMarkerType {
+  DRINKER = "DRINKER",
+  FEEDER = "FEEDER",
+  HUNTING_POSITION = "HUNTING_POSITION",
+}
