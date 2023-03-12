@@ -3,6 +3,7 @@ import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { Form } from "react-bootstrap";
+import { EMarkerType } from "@/types/enums";
 
 type Props = {
   showModal: boolean;
@@ -50,6 +51,17 @@ export const ModalForm: React.FC<Props> = ({
               placeholder="Descripción del marcador"
               {...register("description", { required: true })}
             />
+          </Form.Group>
+
+          <Form.Group className="mt-3">
+            <Form.Label>Tipo de marcador</Form.Label>
+            <Form.Select {...register("type", { required: true })}>
+              <option value={EMarkerType.FEEDER}>Comedero</option>
+              <option value={EMarkerType.DRINKER}>Bebedero</option>
+              <option value={EMarkerType.HUNTING_POSITION}>
+                Puesto de montería
+              </option>
+            </Form.Select>
           </Form.Group>
         </Modal.Body>
 
