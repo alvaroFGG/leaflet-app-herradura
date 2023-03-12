@@ -1,1 +1,1 @@
-export * from "./markerType";
+export * from "./markerTypes";

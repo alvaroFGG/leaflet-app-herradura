@@ -8,11 +8,29 @@ import { IWaypoint } from "@/backend/models/interfaces/waypoint";
 import { MarkerPopup } from "./MarkerPopup";
 import { Button, Spinner } from "react-bootstrap";
 import { ModalForm } from "./ModalForm";
+import { EMarkerIcon } from "@/types/enums/markerIcons";
+import { EMarkerType } from "@/types/enums";
 
 const ZOOM = 15;
 const SCROLL = true;
 const CENTER = [41.290131, -2.320729] as LatLngExpression;
 const WAYPOINTS_URL = "/api/waypoints";
+const DEFAULT_ICON = new L.Icon({
+  iconUrl: EMarkerIcon.DRINKER,
+  iconSize: new L.Point(30, 30),
+});
+const DRINKER_ICON = new L.Icon({
+  iconUrl: EMarkerIcon.DRINKER,
+  iconSize: new L.Point(30, 30),
+});
+const FEEDER_ICON = new L.Icon({
+  iconUrl: EMarkerIcon.FEEDER,
+  iconSize: new L.Point(30, 30),
+});
+const HUNTING_POS_ICON = new L.Icon({
+  iconUrl: EMarkerIcon.HUNTING_POSITION,
+  iconSize: new L.Point(30, 30),
+});
 
 const Map = () => {
   const [waypoints, setWaypoints] = useState<IWaypoint[]>([]);
@@ -21,11 +39,6 @@ const Map = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const mapRef = useRef<any>(null);
-
-  const drinkerIcon = new L.Icon({
-    iconUrl: "https://cdn-icons-png.flaticon.com/512/7987/7987463.png",
-    iconSize: new L.Point(30, 30),
-  });
 
   const fetchWaypoints = async () => {
     const response = await fetch(WAYPOINTS_URL);
@@ -39,7 +52,7 @@ const Map = () => {
 
   const addMarkerInUserLocation = (position: LatLngExpression) => {
     const marker = L.marker(position, {
-      icon: drinkerIcon,
+      icon: DEFAULT_ICON,
     }).addTo(mapRef.current);
 
     marker.bindPopup("Estas aquí").openPopup();
@@ -61,6 +74,19 @@ const Map = () => {
           animation: true,
         });
       });
+    }
+  };
+
+  const selectIcon = (type: string) => {
+    switch (type) {
+      case EMarkerType.DRINKER:
+        return DRINKER_ICON;
+      case EMarkerType.FEEDER:
+        return FEEDER_ICON;
+      case EMarkerType.HUNTING_POSITION:
+        return HUNTING_POS_ICON;
+      default:
+        return DEFAULT_ICON;
     }
   };
 
@@ -102,7 +128,7 @@ const Map = () => {
             key={waypoint._id}
             position={waypoint.location as LatLngExpression}
             title={waypoint.name}
-            icon={drinkerIcon}
+            icon={selectIcon(waypoint.type)}
           >
             <MarkerPopup waypoint={waypoint} />
           </Marker>
