@@ -7,8 +7,10 @@ import L from "leaflet";
 import { IWaypoint } from "@/backend/models/interfaces/waypoint";
 import { MarkerPopup } from "./MarkerPopup";
 import { Button, Spinner } from "react-bootstrap";
-import { ModalForm } from "./ModalForm";
+import { ModalForm } from "./Modals/ModalForm";
 import { EMarkerType, EMarkerIcon } from "@/types/enums";
+import { ModalHelp } from "./Modals/ModalHelp";
+import Head from "next/head";
 
 const ZOOM = 15;
 const SCROLL = true;
@@ -33,7 +35,8 @@ const HUNTING_POS_ICON = new L.Icon({
 
 const Map = () => {
   const [waypoints, setWaypoints] = useState<IWaypoint[]>([]);
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showFormModal, setShowFormModal] = useState<boolean>(false);
+  const [showHelpModal, setShowHelpModal] = useState<boolean>(false);
   const [latlng, setLatlng] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -57,7 +60,7 @@ const Map = () => {
     marker.bindPopup("Estas aquí").openPopup();
     setLatlng(position as number[]);
 
-    setShowModal(true);
+    setShowFormModal(true);
     setIsLoading(false);
   };
 
@@ -113,12 +116,22 @@ const Map = () => {
         )}
       </Button>
 
+      <Button
+        className="position-absolute bg-secondary border-0 "
+        style={{ zIndex: 1000, top: 123, left: 10 }}
+        onClick={() => setShowHelpModal(true)}
+      >
+        ?
+      </Button>
+
       <ModalForm
-        showModal={showModal}
-        setShowModal={setShowModal}
+        showModal={showFormModal}
+        setShowModal={setShowFormModal}
         latlng={latlng}
         fetchWaypoints={fetchWaypoints}
       />
+
+      <ModalHelp show={showHelpModal} setShow={setShowHelpModal} />
 
       {waypoints &&
         waypoints.length > 0 &&
