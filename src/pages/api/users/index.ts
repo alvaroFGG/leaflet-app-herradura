@@ -5,12 +5,6 @@ import bcrypt from "bcrypt";
 
 const SALT = 10;
 
-const getUsers = async (res: NextApiResponse) => {
-  const users = await UserModel.find({});
-
-  res.status(200).json(users);
-};
-
 const createUser = async (req: NextApiRequest, res: NextApiResponse) => {
   const { name, email, password, role } = req.body;
 
@@ -30,10 +24,6 @@ const createUser = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const createEndpoints = async (req: NextApiRequest, res: NextApiResponse) => {
   ProviderDatabase.init();
-
-  if (req.method === "GET") {
-    await getUsers(res);
-  }
 
   if (req.method === "POST") {
     await createUser(req, res);
