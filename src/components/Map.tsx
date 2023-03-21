@@ -4,13 +4,14 @@ import { LatLngExpression } from "leaflet";
 import { useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { IWaypoint } from "@/backend/models/interfaces/waypoint";
+
 import { MarkerPopup } from "./MarkerPopup";
 import { Button, Spinner } from "react-bootstrap";
 import { ModalForm } from "./Modals/ModalForm";
 import { EMarkerType, EMarkerIcon } from "@/types/enums";
 import { ModalHelp } from "./Modals/ModalHelp";
 import Head from "next/head";
+import { IWaypoint } from "@/backend/models/interfaces";
 
 const ZOOM = 15;
 const SCROLL = true;

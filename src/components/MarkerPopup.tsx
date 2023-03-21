@@ -1,4 +1,4 @@
-import { IWaypoint } from "@/backend/models/interfaces/waypoint";
+import { IWaypoint } from "@/backend/models/interfaces";
 import React from "react";
 import { Popup } from "react-leaflet";
 
