@@ -10,16 +10,20 @@ const getUsers = async (res: NextApiResponse) => {
 
 const createUser = async (req: NextApiRequest, res: NextApiResponse) => {
   const { name, email, password, role } = req.body;
-  const user = await UserModel.create({
+
+  const user = new UserModel({
     name,
     email,
     password,
     role,
   });
+
+  await user.save();
+
   res.status(200).json(user);
 };
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const createEndpoints = async (req: NextApiRequest, res: NextApiResponse) => {
   ProviderDatabase.init();
 
   if (req.method === "GET") {
@@ -30,3 +34,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     await createUser(req, res);
   }
 };
+
+export default createEndpoints;

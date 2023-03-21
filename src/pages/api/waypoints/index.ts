@@ -10,12 +10,15 @@ const getWaypoints = async (res: NextApiResponse) => {
 
 const createWaypoint = async (req: NextApiRequest, res: NextApiResponse) => {
   const { name, description, location, type } = req.body;
-  const waypoint = await WaypointModel.create({
+  const waypoint = new WaypointModel({
     name,
     description,
     location,
     type,
   });
+
+  await waypoint.save();
+
   res.status(200).json(waypoint);
 };
 
@@ -30,7 +33,7 @@ const updateWaypoint = async (req: NextApiRequest, res: NextApiResponse) => {
   res.status(200).json(waypoint);
 };
 
-const createEndpoint = async (req: NextApiRequest, res: NextApiResponse) => {
+const createEndpoints = async (req: NextApiRequest, res: NextApiResponse) => {
   ProviderDatabase.init();
 
   switch (req.method) {
@@ -49,4 +52,4 @@ const createEndpoint = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default createEndpoint;
+export default createEndpoints;
